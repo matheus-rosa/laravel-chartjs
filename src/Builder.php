@@ -138,11 +138,12 @@ class Builder
         $this->set('optionsRaw', $optionsRaw);
         return $this;
     }
-
+    
     /**
+     * @param bool $useDOMSubtreeModified
      * @return mixed
      */
-    public function render()
+    public function render($useDOMSubtreeModified = false)
     {
         $chart = $this->charts[$this->name];
 
@@ -153,7 +154,8 @@ class Builder
                 ->with('options', isset($chart['options']) ? $chart['options'] : '')
                 ->with('optionsRaw', isset($chart['optionsRaw']) ? $chart['optionsRaw'] : '')
                 ->with('type', $chart['type'])
-                ->with('size', $chart['size']);
+                ->with('size', $chart['size'])
+                ->with('useDOMSubtreeModified', $useDOMSubtreeModified);
     }
 
     /**

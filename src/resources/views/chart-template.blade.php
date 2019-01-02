@@ -1,8 +1,8 @@
 <canvas id="{!! $element !!}" width="{!! $size['width'] !!}" height="{!! $size['height'] !!}">
 <script>
-    document.addEventListener("DOMContentLoaded", function(event) {
+    var listener = function(event) {
         (function() {
-    		"use strict";
+            "use strict";
             let ctx = document.getElementById("{!! $element !!}");
             window.{!! $element !!} = new Chart(ctx, {
                 type: '{!! $type !!}',
@@ -11,12 +11,22 @@
                     datasets: {!! json_encode($datasets) !!}
                 },
                 @if(!empty($optionsRaw))
-                    options: {!! $optionsRaw !!}
-                @elseif(!empty($options))
+                options: {!! $optionsRaw !!}
+                        @elseif(!empty($options))
                     options: {!! json_encode($options) !!}
-                @endif
-            });
+            @endif
+        });
         })();
-    });
+    };
+
+    @if($useDOMSubtreeModified)
+        document.addEventListener("DOMSubtreeModified", listener, false);
+        setTimeout(function() {
+            document.removeEventListener("DOMSubtreeModified", listener, false);
+        }, 500);
+    @else
+        document.addEventListener("DOMContentLoaded", listener, false);
+    @endif
+
 </script>
 </canvas>
